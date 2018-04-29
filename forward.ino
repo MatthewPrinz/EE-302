@@ -12,9 +12,10 @@ const int motorPin4  = 9;  // Pin  2 of L293
 const int obstaclePin = 7;  // IR Sensor pin
 //Photoresistor
 const int pResistor1 = A0; 
-
-int value1; //value from presistor
-int hasObstacle = HIGH;  // HIGH MEANS NO OBSTACLE
+const int pResistor2 = A5;
+//const int pResistor3 = A4;
+int value1 = 0; //value from presistor1
+int value2 = 0; //value from presistor2
 
 void setup(){
 
@@ -23,57 +24,58 @@ void setup(){
     pinMode(motorPin2, OUTPUT);
     pinMode(motorPin3, OUTPUT);
     pinMode(motorPin4, OUTPUT);
-    pinMode(obstaclePin, INPUT);
     pinMode(pResistor1, INPUT);
-    Serial.begin(9600);
+    pinMode(pResistor2, INPUT);
+    //pinMode(pResistor3, INPUT);
 
 }
-void loop(){
-  hasObstacle = digitalRead(obstaclePin);
-  value1 = analogRead(pResistor1);
-  if (value1 > 300) { //
-    //forward();
-    delay(100); 
-  }
-   if (hasObstacle == LOW) //LOW means something is ahead
-  {
-    stopcar();
-  }
-  else
-  {
-    
-  }
+void loop(){  
+  value1 = analogRead(A0);
+  value2 = analogRead(A5);
   stopcar();
+  if ( (value2 - 60) <= value1 <= (value2+60)) {
+    forward();
+  }
+  if ( value1 > (value2+60) ) {
+    turnRight();
+  }
+  if (value1 < (value2 - 80)) {
+    turnLeft();
+  }
+   
  }
 
-
-void forward(){
-  
+void turnRight(){
+    
     //This code  will turn Motor A clockwise
     digitalWrite(motorPin1, HIGH);
     digitalWrite(motorPin2, LOW);
     digitalWrite(motorPin3, LOW);
     digitalWrite(motorPin4, LOW);
-    //This code will turn Motor B clockwise 
+}
+void turnLeft() {
+    //This code  will turn Motor B clockwise
     digitalWrite(motorPin1, LOW);
     digitalWrite(motorPin2, LOW);
     digitalWrite(motorPin3, HIGH);
     digitalWrite(motorPin4, LOW);
 }
+void forward(){
+    //This code  will turn Motor A & B clockwise
+    digitalWrite(motorPin1, HIGH);
+    digitalWrite(motorPin2, LOW);
+    digitalWrite(motorPin3, HIGH);
+    digitalWrite(motorPin4, LOW);
+}
+
+
 
 void backward(){
-    //This code will turn Motor A counter-clockwise for 2 sec.
+    //This code will turn Motor A & B counter-clockwise.
     digitalWrite(motorPin1, LOW);
     digitalWrite(motorPin2, HIGH);
     digitalWrite(motorPin3, LOW);
-    digitalWrite(motorPin4, LOW);
-  
-    //This code will turn Motor B counter-clockwise for 2 sec.
-    digitalWrite(motorPin1, LOW);
-    digitalWrite(motorPin2, LOW);
-    digitalWrite(motorPin3, LOW);
-    digitalWrite(motorPin4, HIGH);
-  
+    digitalWrite(motorPin4, HIGH );
 }
 
 void stopcar(){
