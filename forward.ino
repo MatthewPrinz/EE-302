@@ -1,6 +1,7 @@
 // EE 302 Robot Car 
 // Written by Matthew Prinz, with help from Rishi Talati
 // Additional help from internet, sources cited at bottom
+// Program for Arduino Uno 
 
 //Motor A
 const int motorPin1  = 5;  // Pin 14 of L293
